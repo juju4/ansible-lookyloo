@@ -1,0 +1,9 @@
+
+6h46
+try building docker locally
+
+```
+# git clone https://github.com/scrapinghub/splash.git
+# cd splash/
+# docker build -t splash-local .
+```

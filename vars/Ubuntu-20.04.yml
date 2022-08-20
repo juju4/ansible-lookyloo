@@ -1,0 +1,14 @@
+---
+
+lookyloo_pkgs:
+  - git
+  - python3
+  - apparmor-utils
+  - acl
+  - unzip
+  - pkg-config
+  - build-essential
+  - python3-venv
+  - python3-dev
+
+ufw_rulename_ssh: OpenSSH

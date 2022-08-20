@@ -1,0 +1,53 @@
+---
+
+- name: Ensure systemd is present
+  ansible.builtin.package:
+    name: systemd
+    state: present
+
+- name: Configure splash systemd unit
+  ansible.builtin.template:
+    src: systemd-splash.service.j2
+    dest: /etc/systemd/system/splash.service
+    mode: '0644'
+  notify:
+    - reload systemd
+    - restart splash
+  when: false
+
+- name: Enable and start splash service
+  ansible.builtin.service:
+    name: splash
+    state: started
+    enabled: yes
+  when: false
+
+- name: Configure uwhoisd systemd unit
+  ansible.builtin.template:
+    src: systemd-uwhoisd.service.j2
+    dest: /etc/systemd/system/uwhoisd.service
+    mode: '0644'
+  notify:
+    - reload systemd
+    - restart uwhoisd
+
+- name: Enable and start uwhoisd service
+  ansible.builtin.service:
+    name: uwhoisd
+    state: started
+    enabled: yes
+
+- name: Configure lookyloo systemd unit
+  ansible.builtin.template:
+    src: systemd-lookyloo.service.j2
+    dest: /etc/systemd/system/lookyloo.service
+    mode: '0644'
+  notify:
+    - reload systemd
+    - restart lookyloo
+
+- name: Enable and start lookyloo service
+  ansible.builtin.service:
+    name: lookyloo
+    state: started
+    enabled: yes

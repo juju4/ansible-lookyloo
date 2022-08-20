@@ -1,0 +1,33 @@
+---
+
+- name: Ensure docker python module is present
+  pip:
+    name: docker
+    state: present
+  become: yes
+  become_user: "{{ lookyloo_user }}"
+
+- name: Pull Docker Splash image
+  community.docker.docker_image:
+    name: "{{ lookyloo_splash_image }}:{{ lookyloo_splash_version }}"
+    source: pull
+  become: yes
+  become_user: "{{ lookyloo_user }}"
+
+# docker run -d --name=lookyloo_splash2 -p 8050:8050 -p 5023:5023 splash-local:latest --disable-browser-caches
+- name: Start Splash container
+  community.docker.docker_container:
+    name: lookyloo_splash
+    image: "{{ lookyloo_splash_image }}"
+    state: started
+    restart: yes
+    ports:
+      # Publish container ports
+      - "8050:8050"
+      - "5023:5023"
+    # no way to pass only extra arguments to ansible/python docker
+    # https://stackoverflow.com/questions/35540061/pass-command-line-arguments-to-docker-with-ansible
+    # https://groups.google.com/g/ansible-project/c/DXCg-2drIIE
+    command: python3 /app/bin/splash --proxy-profiles-path /etc/splash/proxy-profiles --js-profiles-path /etc/splash/js-profiles --filters-path /etc/splash/filters --lua-package-path /etc/splash/lua_modules/?.lua --disable-browser-caches
+  become: yes
+  become_user: "{{ lookyloo_user }}"

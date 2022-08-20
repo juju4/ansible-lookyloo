@@ -1,0 +1,19 @@
+[Unit]
+Description=uwhoisd service
+After=network.target
+
+[Service]
+User={{ lookyloo_user }}
+Group={{ lookyloo_user }}
+Type=forking
+WorkingDirectory={{ lookyloo_home }}/uwhoisd
+Environment=PATH=/usr/sbin:/usr/bin:/sbin:/bin:{{ poetry_root }}/bin
+Environment="UWHOISD_HOME={{ lookyloo_home }}/uwhoisd"
+ExecStart=/bin/bash -c "exec poetry run start"
+ExecStop=/bin/bash -c "exec poetry run stop"
+StandardOutput=append:/var/log/uwhoisd_message.log
+StandardError=append:/var/log/uwhoisd_error.log
+
+
+[Install]
+WantedBy=multi-user.target

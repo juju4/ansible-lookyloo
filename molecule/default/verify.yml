@@ -1,0 +1,117 @@
+---
+
+- name: Verify
+  hosts: lookyloo
+  gather_facts: true
+  vars:
+    lookyloo_start: /var/_lookyloo/lookyloo/bin/start.py
+    binary_redis: /var/_lookyloo/redis/src/redis-server
+    config: /var/_lookyloo/lookyloo/config/generic.json
+    ports:
+      # lookyloo gunicorn
+      - { h: 0.0.0.0, p: 5100 }
+      # splash container
+      # - { h: localhost, p: 5023 }
+      # - { h: localhost, p: 8050 }
+    url: http://localhost:5100
+    splash_url: http://localhost:8050/render.html?url=http://www.google.com&timeout=10
+  pre_tasks:
+    - name: Debug | var ansible_virtualization_type
+      ansible.builtin.debug: var=ansible_virtualization_type
+  tasks:
+    - name: Gather package facts
+      ansible.builtin.package_facts:
+        manager: auto
+    - name: Validate that needed packages are present
+      ansible.builtin.assert:
+        that: ansible_facts.packages['python3-venv']
+
+    - name: Check lookyloo start file
+      ansible.builtin.stat:
+        path: "{{ lookyloo_start }}"
+      register: bin1
+    - name: Validate lookyloo start.py is present
+      ansible.builtin.assert:
+        that: bin1.stat.exists and bin1.stat.size != 0 and bin1.stat.mode == '0775'
+
+    - name: Check redis file
+      ansible.builtin.stat:
+        path: "{{ binary_redis }}"
+      register: bin2
+    - name: Validate redis binary is present
+      ansible.builtin.assert:
+        that: bin2.stat.exists and bin2.stat.size != 0 and bin2.stat.mode == '0775'
+
+    - name: Check lookyloo config file
+      ansible.builtin.stat:
+        path: "{{ config }}"
+      register: cfg1
+    - name: Validate lookyloo configuration files are present
+      ansible.builtin.assert:
+        that: cfg1.stat.exists and cfg1.stat.size != 0
+
+    - name: Ensure lookyloo processes are running
+      ansible.builtin.command: pgrep -u _lookyloo gunicorn
+      register: ps3
+      changed_when: false
+      failed_when: false
+    - name: Validate ps output
+      ansible.builtin.assert:
+        that: ps3.stdout
+      when: >
+        not (ansible_virtualization_type is defined and
+              (ansible_virtualization_type == "docker" or ansible_virtualization_type == "containerd")
+            )
+
+    - name: check all processes
+      ansible.builtin.command: ps aux
+      changed_when: false
+      register: psa
+    - name: Debug | ps aux output
+      ansible.builtin.debug: var=psa verbosity=1
+
+    - name: Ensure ports are listening
+      ansible.builtin.wait_for:
+        host: "{{ item.h }}"
+        port: "{{ item.p }}"
+        timeout: 10
+      with_items: "{{ ports }}"
+      when: >
+        not (ansible_virtualization_type is defined and
+              (ansible_virtualization_type == "docker" or ansible_virtualization_type == "containerd")
+            )
+
+    - name: Fetch localhost endpoint
+      ansible.builtin.uri:
+        url: "{{ url }}"
+        validate_certs: no
+        return_content: yes
+      register: web
+      failed_when: false
+    - name: Validate localhost endpoint
+      ansible.builtin.assert:
+        that: >
+          "'lookyloo' in web.content"
+      when: >
+        not (ansible_virtualization_type is defined and
+              (ansible_virtualization_type == "docker" or ansible_virtualization_type == "containerd")
+            )
+
+    - name: Fetch localhost endpoint - splash
+      ansible.builtin.uri:
+        url: "{{ splash_url }}"
+        validate_certs: no
+        return_content: yes
+      register: web
+      failed_when: false
+      when: false
+    - name: Validate localhost endpoint - splash
+      ansible.builtin.assert:
+        that:
+          - web.status != -1
+          - "'This is failing...' in web.content"
+      when: >
+        not (ansible_virtualization_type is defined and
+              (ansible_virtualization_type == "docker" or ansible_virtualization_type == "containerd")
+            )
+        and false

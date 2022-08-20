@@ -1,0 +1,16 @@
+---
+galaxy_info:
+  author: juju4
+  role_name: lookyloo
+  description: Setup lookyloo server, a web interface that allows you to capture and map the journey of a website page
+  license: BSD
+  min_ansible_version: '2.12'
+  platforms:
+    - name: Ubuntu
+      versions:
+        - jammy
+        - focal
+  galaxy_tags:
+    - security
+    - web
+dependencies: []

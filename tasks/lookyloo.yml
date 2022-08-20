@@ -1,0 +1,76 @@
+---
+
+- name: git clone repository
+  ansible.builtin.git:
+    repo: https://github.com/Lookyloo/lookyloo.git
+    dest: "{{ lookyloo_root }}"
+    version: "{{ lookyloo_version }}"
+    update: no
+    force: no
+
+- name: Install lookyloo
+  ansible.builtin.command: poetry install
+  args:
+    chdir: "{{ lookyloo_root }}"
+    # creates:
+  environment:
+    PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:{{ poetry_root }}/bin"
+  register: poetry_install
+  changed_when: "'No dependencies to install or update' not in poetry_install.stdout"
+
+- name: Install playwright
+  ansible.builtin.command: poetry run playwright install
+  args:
+    chdir: "{{ lookyloo_root }}"
+    creates: /var/_lookyloo/.cache/ms-playwright/chromium-1015/INSTALLATION_COMPLETE
+  environment:
+    PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:{{ poetry_root }}/bin"
+  register: poetry_install2
+
+- name: Ensure .env is configured
+  ansible.builtin.copy:
+    dest: "{{ lookyloo_root }}/.env"
+    content: "LOOKYLOO_HOME=\"{{ lookyloo_root }}\""
+    mode: '0644'
+    owner: "{{ lookyloo_user }}"
+    backup: "{{ lookyloo_backup }}"
+
+- name: Ensure config.json is configured
+  ansible.builtin.template:
+    src: config.json.j2
+    dest: "{{ lookyloo_root }}/config/generic.json"
+    mode: '0644'
+    owner: "{{ lookyloo_user }}"
+    backup: "{{ lookyloo_backup }}"
+
+- name: Ensure modules.json is configured
+  ansible.builtin.template:
+    src: modules.json.j2
+    dest: "{{ lookyloo_root }}/config/modules.json"
+    mode: '0644'
+    owner: "{{ lookyloo_user }}"
+    backup: "{{ lookyloo_backup }}"
+
+- name: Ensure working git pull
+  ansible.builtin.replace:
+    dest: "{{ lookyloo_root }}/bin/update.py"
+    regexp: "^    run_command.'git pull .*'."
+    replace: "    run_command('git pull --recurse-submodules origin main')"
+    mode: '0755'
+    owner: "{{ lookyloo_user }}"
+    backup: "{{ lookyloo_backup }}"
+  notify:
+    - restart lookyloo
+  when: false
+
+- name: Download web dependencies
+  ansible.builtin.get_url:
+    url: "{{ item.u }}"
+    dest: "{{ lookyloo_root }}/website/web/static/{{ item.d }}"
+    mode: '0644'
+    checksum: "{{ item.c }}"
+  loop: "{{ lookyloo_web_static }}"
+  register: dl_result
+  until: dl_result is success
+
+# /var/_lookyloo/lookyloo/etc/logrotate.d/lookyloo

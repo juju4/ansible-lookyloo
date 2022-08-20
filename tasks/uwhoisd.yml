@@ -1,0 +1,19 @@
+---
+
+- name: git clone uwhoisd repository
+  ansible.builtin.git:
+    repo: https://github.com/Lookyloo/uwhoisd
+    dest: "{{ lookyloo_home }}/uwhoisd"
+    version: "{{ lookyloo_uwhoisd_version }}"
+    update: no
+    force: no
+
+- name: Install uwhoisd
+  ansible.builtin.command: poetry install
+  args:
+    chdir: "{{ lookyloo_home }}/uwhoisd"
+    # creates:
+  environment:
+    PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:{{ poetry_root }}/bin"
+  register: poetry_install
+  changed_when: "'No dependencies to install or update' not in poetry_install.stdout"

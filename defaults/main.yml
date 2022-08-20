@@ -1,0 +1,93 @@
+---
+
+lookyloo_version: c674a45d13692038cfdbc0b1ed3c3568bf18087b
+lookyloo_poetry_hash: 'sha256:fd16592a208a76f378e11186db492ff283aeb6ef716b5b7455d65eec5424d74d'
+lookyloo_user: _lookyloo
+lookyloo_home: /var/_lookyloo
+lookyloo_root: "{{ lookyloo_home }}/lookyloo"
+lookyloo_splash_image: scrapinghub/splash
+lookyloo_splash_version: 3.5.0
+poetry_root: /usr/local/share/poetry
+lookyloo_uwhoisd_version: 92160a4e9e5fd9f8a18e3d4fa72fc1b1ab8cef9d
+
+lookyloo_listen_ip: 0.0.0.0
+lookyloo_listen_port: 5100
+lookyloo_public_instance: false
+lookyloo_public_domain: lookyloo.myorg.local
+lookyloo_email_from: "Lookyloo <lookyloo@myorg.local>"
+lookyloo_email_to: "Investigation Team <investigation_unit@myorg.local>"
+lookyloo_email_subject: "Capture from Lookyloo to review"
+lookyloo_email_confirm_message: "Message the users need to confirm before they submit a notification."
+lookyloo_smtp_host: localhost
+lookyloo_smtp_port: 25
+
+# matching tools/3rdparty.py
+lookyloo_web_static:
+  - { u: 'https://code.jquery.com/jquery-3.6.0.min.js',
+      d: 'jquery.min.js',
+      c: 'sha256:ff1523fb7389539c84c65aba19260648793bb4f5e29329d2ee8804bc37a3fe6e'
+  }
+  - { u: 'https://d3js.org/d3.v7.min.js',
+      d: 'd3.v7.min.js',
+      c: 'sha256:b384cf0baeec03aa9e1443fd670cd41c9ec984def9a7b4dbfd7ad2f197d5b573'
+  }
+  - { u: 'https://cdn.datatables.net/v/bs4/dt-1.12.1/datatables.min.js',
+      d: 'datatables.min.js',
+      c: 'sha256:abf885502bc52666535c0d61220ebed31c815cf98d4627555d855610198d26a8.'
+  }
+  - { u: 'https://cdn.datatables.net/v/bs4/dt-1.12.1/datatables.min.css',
+      d: 'datatables.min.css',
+      c: 'sha256:679d30b7c38da66ad4a14346fe491b7a7d8c7024a4622c5bd90ae0945bceaad1.'
+  }
+
+lookyloo_cgroups_restriction_enable: true
+
+
+install_archives: /var/_install
+# needed ansible Unprivileged become user
+lookyloo_fstab: []
+#  - { src: LABEL=SOME_LABEL, path: /, fstype: ext4, opts: "defaults,acl", state: remounted }
+
+# should file changes backup file before (replace, lineinfile...)
+lookyloo_backup: false
+
+lookyloo_logrotate_period: 'daily'
+lookyloo_logrotate_rotate: 90
+lookyloo_logrotate_compress: true
+lookyloo_logrotate_delaycompress: true
+lookyloo_logrotate_datext: true
+lookyloo_logrotate_datformat: '-%Y%m%d'
+
+lookyloo_ufw: true
+lookyloo_ufw_if: eth0
+## only affect incoming traffic
+# lookyloo_ufw_default_policy: allow
+lookyloo_ufw_default_policy: deny
+lookyloo_ufw_default_logging: medium
+# trusted sources for all ports
+lookyloo_ufw_access:
+  - 10.0.0.0/8
+  - 172.16.0.0/12
+  - 192.168.0.0/16
+lookyloo_ufw_access_with_log: []
+# opened ports for all sources
+lookyloo_ufw_allow_ports_in:
+  - '5100'
+lookyloo_ufw_out_logging: no
+lookyloo_ufw_allow_ports_out:
+  # - '22'
+  # - '25'
+  - '53'
+  - '123'
+  ## email/TLS?
+  - '587'
+  ## web (some apt updates are on http)
+  - '80'
+  - '443'
+  # - '8080'
+  ## gpg keyserver
+  # - '11371'
+  ## using dhcp?
+  # - '67'
+
+lookyloo_ufw_allow_if_out: []

@@ -1,0 +1,111 @@
+---
+
+- name: Include version-specific variables for Ubuntu.
+  ansible.builtin.include_vars: "{{ ansible_distribution }}-{{ ansible_distribution_version }}.yml"
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Ensure archives folder exists
+  ansible.builtin.file:
+    dest: "{{ install_archives }}"
+    state: directory
+    mode: '0775'
+  become: yes
+  become_user: root
+
+- name: Debian | Update cache
+  ansible.builtin.apt:
+    update_cache: yes
+    cache_valid_time: "{{ lookyloo_apt_cache_valid_time | default('3600') }}"
+  become: yes
+  become_user: root
+  when: ansible_os_family == 'Debian'
+
+- name: Ensure dependencies packages are present
+  ansible.builtin.package:
+    name: "{{ lookyloo_pkgs }}"
+    state: present
+  become: yes
+  become_user: root
+  register: pkg_result
+  until: pkg_result is success
+
+- name: Ensure / mounted with flag acl for ansible become unprivileged user
+  ansible.posix.mount:
+    src: "{{ item.src }}"
+    path: "{{ item.path }}"
+    fstype: "{{ item.fstype }}"
+    opts: "{{ item.opts }}"
+    state: "{{ item.state }}"
+  loop: "{{ lookyloo_fstab }}"
+  become: yes
+  become_user: root
+  when: >
+    not (ansible_virtualization_type is defined and
+    (ansible_virtualization_type == "docker" or ansible_virtualization_type == "containerd")
+    )
+
+- name: ensure lookyloo user exists
+  ansible.builtin.user:
+    name: "{{ lookyloo_user }}"
+    home: "{{ lookyloo_home }}"
+    system: true
+    groups: docker
+    append: yes
+  become: yes
+  become_user: root
+
+- name: Ensure right permissions for lookyloo home
+  ansible.builtin.file:
+    path: "{{ lookyloo_home }}"
+    owner: "{{ lookyloo_user }}"
+    mode: '0755'
+    state: directory
+  become: yes
+  become_user: root
+
+- name: Grant user poetry access to archives
+  ansible.posix.acl:
+    path: "{{ install_archives }}"
+    entity: "{{ lookyloo_user }}"
+    etype: user
+    permissions: rwx
+    state: present
+  become: yes
+  become_user: root
+
+- import_tasks: poetry.yml
+  vars:
+    poetry_user: "{{ lookyloo_user }}"
+
+- import_tasks: redis-source.yml
+- import_tasks: splash-container.yml
+  when:
+    - not (ansible_virtualization_type is defined and
+          (ansible_virtualization_type == "docker" or ansible_virtualization_type == "containerd")
+        )
+    - false
+
+- import_tasks: lookyloo.yml
+  become: yes
+  become_user: "{{ lookyloo_user }}"
+
+- import_tasks: uwhoisd.yml
+  become: yes
+  become_user: "{{ lookyloo_user }}"
+
+- import_tasks: firewall-ufw.yml
+  become: yes
+  become_user: root
+  when:
+    - lookyloo_ufw|bool
+    - not (ansible_virtualization_type is defined and
+          (ansible_virtualization_type == "docker" or ansible_virtualization_type == "containerd")
+        )
+
+- import_tasks: systemd.yml
+  become: yes
+  become_user: root
+  when: >
+    not (ansible_virtualization_type is defined and
+          (ansible_virtualization_type == "docker" or ansible_virtualization_type == "containerd")
+    )
