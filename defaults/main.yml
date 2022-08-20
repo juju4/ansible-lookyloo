@@ -3,6 +3,7 @@
 lookyloo_version: c674a45d13692038cfdbc0b1ed3c3568bf18087b
 lookyloo_poetry_hash: 'sha256:fd16592a208a76f378e11186db492ff283aeb6ef716b5b7455d65eec5424d74d'
 lookyloo_user: _lookyloo
+# lookyloo_user_groups: docker
 lookyloo_home: /var/_lookyloo
 lookyloo_root: "{{ lookyloo_home }}/lookyloo"
 lookyloo_splash_image: scrapinghub/splash
