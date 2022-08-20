@@ -79,11 +79,11 @@
 
 - import_tasks: redis-source.yml
 - import_tasks: splash-container.yml
-  when:
-    - not (ansible_virtualization_type is defined and
+  when: >
+    not (ansible_virtualization_type is defined and
           (ansible_virtualization_type == "docker" or ansible_virtualization_type == "containerd")
         )
-    - false
+    and false
 
 - import_tasks: lookyloo.yml
   become: yes
