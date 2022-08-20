@@ -17,7 +17,7 @@ jobs:
       matrix:
         include:
           - os: ubuntu-22.04
-            experimental: true
+            experimental: false
           - os: ubuntu-20.04
             experimental: false
     env:
@@ -85,8 +85,7 @@ jobs:
       - name: After script - systemd
         run: |
           systemctl -l --no-pager status lookyloo || true
-          systemctl -l --no-pager status clamav-freshclam || true
-          systemctl -l --no-pager status clamav-daemon || true
+          systemctl -l --no-pager status uwhoisd || true
           systemd-analyze --no-pager security || true
           rsyslogd -v
         if: ${{ always() }}
@@ -95,29 +94,22 @@ jobs:
         run: |
           set -x
           sudo ls -la /var/_lookyloo/
-          sudo ls -la /var/_lookyloo/kvrocks
           sudo ls -la /var/_lookyloo/redis
           sudo ls -la /var/_lookyloo/lookyloo
           sudo cat /var/_lookyloo/lookyloo/config/generic.json
-          sudo ls -la /var/_lookyloo/kvrocks/src/kvrocks /var/_lookyloo/redis/src/redis-server || true
+          sudo ls -la /var/_lookyloo/redis/src/redis-server || true
         if: ${{ always() }}
         continue-on-error: true
       - name: After script - logs
         run: |
+          ls -la /var/log/
           sudo tail -200 /var/log/syslog
-        if: ${{ always() }}
-        continue-on-error: true
-      - name: After script - misc
-        run: |
-          set -x
-          sudo ls -la /var/lib/clamav/ || true
-          sudo ls -la /var/run/clamav/clamd.ctl || true
-          ls -la /etc/apparmor.d/usr.lib.libreoffice* || true
-          sudo cat /etc/apparmor.d/usr.lib.libreoffice.program.soffice.bin || true
+          sudo tail -200 /var/log/lookyloo_error.log
+          sudo tail -200 /var/log/lookyloo_message.log
         if: ${{ always() }}
         continue-on-error: true
       - name: After script - curl
         run: |
-          curl -vL http://localhost:6100
+          curl -vL http://localhost:5100
         if: ${{ always() }}
         continue-on-error: true
