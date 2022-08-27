@@ -1,6 +1,6 @@
 ---
 
-- name: git clone repository
+- name: Git clone repository
   ansible.builtin.git:
     repo: https://github.com/Lookyloo/lookyloo.git
     dest: "{{ lookyloo_root }}"

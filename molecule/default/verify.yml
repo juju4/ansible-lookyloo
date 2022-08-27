@@ -15,9 +15,17 @@
       # - { h: localhost, p: 8050 }
     url: http://localhost:5100
     splash_url: http://localhost:8050/render.html?url=http://www.google.com&timeout=10
+    is_container: false
   pre_tasks:
     - name: Debug | var ansible_virtualization_type
       ansible.builtin.debug: var=ansible_virtualization_type
+    - name: Set fact is_container
+      ansible.builtin.set_fact:
+        is_container: true
+      when: >
+        (ansible_virtualization_type is defined and
+          (ansible_virtualization_type == "docker" or ansible_virtualization_type == "containerd")
+        )
   tasks:
     - name: Gather package facts
       ansible.builtin.package_facts:
@@ -58,12 +66,10 @@
     - name: Validate ps output
       ansible.builtin.assert:
         that: ps3.stdout
-      when: >
-        not (ansible_virtualization_type is defined and
-              (ansible_virtualization_type == "docker" or ansible_virtualization_type == "containerd")
-            )
+      when:
+        - not is_container|bool
 
-    - name: check all processes
+    - name: Check all processes
       ansible.builtin.command: ps aux
       changed_when: false
       register: psa
@@ -76,10 +82,8 @@
         port: "{{ item.p }}"
         timeout: 10
       with_items: "{{ ports }}"
-      when: >
-        not (ansible_virtualization_type is defined and
-              (ansible_virtualization_type == "docker" or ansible_virtualization_type == "containerd")
-            )
+      when:
+        - not is_container|bool
 
     - name: Fetch localhost endpoint
       ansible.builtin.uri:
@@ -92,10 +96,8 @@
       ansible.builtin.assert:
         that: >
           "'lookyloo' in web.content"
-      when: >
-        not (ansible_virtualization_type is defined and
-              (ansible_virtualization_type == "docker" or ansible_virtualization_type == "containerd")
-            )
+      when:
+        - not is_container|bool
 
     - name: Fetch localhost endpoint - splash
       ansible.builtin.uri:
@@ -110,8 +112,4 @@
         that:
           - web.status != -1
           - "'This is failing...' in web.content"
-      when: >
-        not (ansible_virtualization_type is defined and
-              (ansible_virtualization_type == "docker" or ansible_virtualization_type == "containerd")
-            )
-        and false
+      when: not is_container | bool and false

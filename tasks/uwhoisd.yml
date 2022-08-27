@@ -1,6 +1,6 @@
 ---
 
-- name: git clone uwhoisd repository
+- name: Git clone uwhoisd repository
   ansible.builtin.git:
     repo: https://github.com/Lookyloo/uwhoisd
     dest: "{{ lookyloo_home }}/uwhoisd"
