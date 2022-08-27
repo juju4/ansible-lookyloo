@@ -65,7 +65,7 @@ $  curl -v 'http://localhost:8050/render.html?url=http://www.google.com&timeout=
 > Host: localhost:8050
 > User-Agent: curl/7.81.0
 > Accept: */*
-> 
+>
 * Recv failure: Connection reset by peer
 * Closing connection 0
 curl: (56) Recv failure: Connection reset by peer
