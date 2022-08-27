@@ -83,6 +83,11 @@
     - repl-diskless-sync-max-replicas
     - appenddirname
     - aof-timestamp-enabled
+    - hash-max-listpack-entries
+    - hash-max-listpack-value
+    - list-max-listpack-size
+    - zset-max-listpack-entries
+    - zset-max-listpack-value
   when: lookyloo_version == 'HEAD'
 
 - name: Fix redis indexing config - 10316
@@ -95,6 +100,11 @@
     - repl-diskless-sync-max-replicas
     - appenddirname
     - aof-timestamp-enabled
+    - hash-max-listpack-entries
+    - hash-max-listpack-value
+    - list-max-listpack-size
+    - zset-max-listpack-entries
+    - zset-max-listpack-value
   when: lookyloo_version == 'HEAD'
 
 # /var/_lookyloo/lookyloo/etc/logrotate.d/lookyloo
