@@ -60,7 +60,7 @@
     owner: "{{ lookyloo_user }}"
     backup: "{{ lookyloo_backup }}"
   notify:
-    - restart lookyloo
+    - Restart lookyloo
   when: false
 
 - name: Download web dependencies

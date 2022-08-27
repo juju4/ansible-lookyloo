@@ -11,8 +11,8 @@
     dest: /etc/systemd/system/splash.service
     mode: '0644'
   notify:
-    - reload systemd
-    - restart splash
+    - Reload systemd
+    - Restart splash
   when: false
 
 - name: Enable and start splash service
@@ -28,8 +28,8 @@
     dest: /etc/systemd/system/uwhoisd.service
     mode: '0644'
   notify:
-    - reload systemd
-    - restart uwhoisd
+    - Reload systemd
+    - Restart uwhoisd
 
 - name: Enable and start uwhoisd service
   ansible.builtin.service:
@@ -43,8 +43,8 @@
     dest: /etc/systemd/system/lookyloo.service
     mode: '0644'
   notify:
-    - reload systemd
-    - restart lookyloo
+    - Reload systemd
+    - Restart lookyloo
 
 - name: Enable and start lookyloo service
   ansible.builtin.service:
