@@ -100,16 +100,19 @@ jobs:
           sudo ls -la /var/_lookyloo/redis/src/redis-server || true
         if: ${{ always() }}
         continue-on-error: true
+      - name: After script - curl
+        run: |
+          curl -vL http://localhost:5100 || true
+          curl -vL "http://localhost:5100/capture?url=https://duckduckgo.com" || true
+          curl -vL "http://localhost:5100/whois/duckduckgo.com" || true
+          sleep 30
+        if: ${{ always() }}
+        continue-on-error: true
       - name: After script - logs
         run: |
           ls -la /var/log/
           sudo tail -200 /var/log/syslog
           sudo tail -200 /var/log/lookyloo_error.log
           sudo tail -200 /var/log/lookyloo_message.log
-        if: ${{ always() }}
-        continue-on-error: true
-      - name: After script - curl
-        run: |
-          curl -vL http://localhost:5100
         if: ${{ always() }}
         continue-on-error: true
