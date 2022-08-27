@@ -37,17 +37,44 @@
     state: started
     enabled: yes
 
-- name: Configure lookyloo systemd unit
+- name: Ensure redis does not daemonize
+  ansible.builtin.replace:
+    dest: "{{ lookyloo_root }}/cache/cache.conf"
+    regexp: "^daemonize .*"
+    replace: "daemonize no"
+    mode: '0644'
+    owner: "{{ lookyloo_user }}"
+    backup: "{{ lookyloo_backup }}"
+  notify:
+    - Restart lookyloo-redis
+
+- name: Ensure redis-indexing does not daemonize
+  ansible.builtin.replace:
+    dest: "{{ lookyloo_root }}/indexing/indexing.conf"
+    regexp: "^daemonize .*"
+    replace: "daemonize no"
+    mode: '0644'
+    owner: "{{ lookyloo_user }}"
+    backup: "{{ lookyloo_backup }}"
+  notify:
+    - Restart lookyloo-redis-indexing
+
+- name: Configure pandora systemd units
   ansible.builtin.template:
-    src: systemd-lookyloo.service.j2
-    dest: /etc/systemd/system/lookyloo.service
+    src: "systemd-{{ item }}.service.j2"
+    dest: "/etc/systemd/system/{{ item }}.service"
     mode: '0644'
   notify:
     - Reload systemd
-    - Restart lookyloo
+    - "Restart {{ item }}"
+  loop: "{{ lookyloo_systemd_units }}"
 
-- name: Enable and start lookyloo service
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
+
+- name: Enable and start pandora services
   ansible.builtin.service:
-    name: lookyloo
+    name: "{{ item }}"
     state: started
     enabled: yes
+  loop: "{{ lookyloo_systemd_units }}"

@@ -84,7 +84,13 @@ jobs:
         continue-on-error: true
       - name: After script - systemd
         run: |
-          systemctl -l --no-pager status lookyloo || true
+          systemctl -l --no-pager status lookyloo-redis || true
+          systemctl -l --no-pager status lookyloo-redis-indexing || true
+          systemctl -l --no-pager status lookyloo-archiver || true
+          systemctl -l --no-pager status lookyloo-async_capture || true
+          systemctl -l --no-pager status lookyloo-background_indexer || true
+          systemctl -l --no-pager status lookyloo-background_processing || true
+          systemctl -l --no-pager status lookyloo-web || true
           systemctl -l --no-pager status uwhoisd || true
           systemd-analyze --no-pager security || true
           rsyslogd -v
@@ -98,19 +104,23 @@ jobs:
           sudo ls -la /var/_lookyloo/lookyloo
           sudo cat /var/_lookyloo/lookyloo/config/generic.json
           sudo cat /var/_lookyloo/lookyloo/cache/cache.conf
+          sudo cat /var/_lookyloo/lookyloo/indexing/indexing.conf
           sudo ls -la /var/_lookyloo/redis/src/redis-server || true
-        if: ${{ always() }}
-        continue-on-error: true
-      - name: After script - logs
-        run: |
-          ls -la /var/log/
-          sudo tail -200 /var/log/syslog
-          sudo tail -200 /var/log/lookyloo_error.log
-          sudo tail -200 /var/log/lookyloo_message.log
         if: ${{ always() }}
         continue-on-error: true
       - name: After script - curl
         run: |
-          curl -vL http://localhost:5100
+          curl -vL http://localhost:5100 || true
+          curl -vL "http://localhost:5100/capture?url=https://duckduckgo.com" || true
+          curl -vL "http://localhost:5100/whois/duckduckgo.com" || true
+          sleep 30
+        if: ${{ always() }}
+        continue-on-error: true
+      - name: After script - logs
+        run: |
+          set -x
+          sudo find /var/log/ -name 'lookyloo*.log' -exec tail -100 {} \;
+          ls -la /var/log/
+          sudo tail -200 /var/log/syslog
         if: ${{ always() }}
         continue-on-error: true

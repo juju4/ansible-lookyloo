@@ -26,9 +26,63 @@
   when:
     - not is_container|bool
 
-- name: Restart lookyloo
+- name: Restart lookyloo-archiver
   ansible.builtin.service:
-    name: lookyloo
+    name: lookyloo-archiver
+    state: restarted
+  become: yes
+  become_user: root
+  when:
+    - not is_container|bool
+
+- name: Restart lookyloo-async_capture
+  ansible.builtin.service:
+    name: lookyloo-async_capture
+    state: restarted
+  become: yes
+  become_user: root
+  when:
+    - not is_container|bool
+
+- name: Restart lookyloo-background_indexer
+  ansible.builtin.service:
+    name: lookyloo-background_indexer
+    state: restarted
+  become: yes
+  become_user: root
+  when:
+    - not is_container|bool
+
+- name: Restart lookyloo-background_processing
+  ansible.builtin.service:
+    name: lookyloo-background_processing
+    state: restarted
+  become: yes
+  become_user: root
+  when:
+    - not is_container|bool
+
+- name: Restart lookyloo-redis
+  ansible.builtin.service:
+    name: lookyloo-redis
+    state: restarted
+  become: yes
+  become_user: root
+  when:
+    - not is_container|bool
+
+- name: Restart lookyloo-redis-indexing
+  ansible.builtin.service:
+    name: lookyloo-redis-indexing
+    state: restarted
+  become: yes
+  become_user: root
+  when:
+    - not is_container|bool
+
+- name: Restart lookyloo-web
+  ansible.builtin.service:
+    name: lookyloo-web
     state: restarted
   become: yes
   become_user: root

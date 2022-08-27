@@ -18,6 +18,12 @@
   register: poetry_install
   changed_when: "'No dependencies to install or update' not in poetry_install.stdout"
 
+- name: Get lookyloo poetry virtualenv path
+  ansible.builtin.command: find /var/_lookyloo/.cache/pypoetry/virtualenvs/ -maxdepth 1 -type d -iname 'lookyloo-*'
+  register: venv_lookyloo
+  changed_when: false
+  failed_when: venv_lookyloo.rc != 0
+
 - name: Install playwright
   ansible.builtin.command: poetry run playwright install
   args:

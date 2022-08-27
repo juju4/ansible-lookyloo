@@ -42,7 +42,14 @@ lookyloo_web_static:
   }
 
 lookyloo_cgroups_restriction_enable: true
-
+lookyloo_systemd_units:
+  - lookyloo-redis
+  - lookyloo-redis-indexing
+  - lookyloo-archiver
+  - lookyloo-async_capture
+  - lookyloo-background_indexer
+  - lookyloo-background_processing
+  - lookyloo-web
 
 install_archives: /var/_install
 # needed ansible Unprivileged become user
