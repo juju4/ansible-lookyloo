@@ -97,6 +97,7 @@ jobs:
           sudo ls -la /var/_lookyloo/redis
           sudo ls -la /var/_lookyloo/lookyloo
           sudo cat /var/_lookyloo/lookyloo/config/generic.json
+          sudo cat /var/_lookyloo/lookyloo/cache/cache.conf
           sudo ls -la /var/_lookyloo/redis/src/redis-server || true
         if: ${{ always() }}
         continue-on-error: true
