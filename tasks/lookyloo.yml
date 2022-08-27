@@ -73,12 +73,15 @@
   register: dl_result
   until: dl_result is success
 
-- name: Fix redis config - #10316
+- name: Fix redis config - 10316
   ansible.builtin.replace:
     path: "{{ lookyloo_root }}/cache/cache.conf"
-    regexp: "^repl-diskless-sync-max-replicas "
-    replace: "# repl-diskless-sync-max-replicas "
+    regexp: "^{{ item }} "
+    replace: "# {{ item }} "
     mode: '0644'
+  loop:
+    - repl-diskless-sync-max-replicas
+    - appenddirname
   when: lookyloo_version == 'HEAD'
 
 # /var/_lookyloo/lookyloo/etc/logrotate.d/lookyloo
