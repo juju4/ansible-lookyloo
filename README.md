@@ -51,6 +51,8 @@ $ MOLECULE_DISTRO=ubuntu:20.04 molecule test --destroy=never
 * Tree page returns blank content and error log has `WARNING:Lookyloo:Tree too deep, probably a recursive refresh: maximum recursion depth exceeded while pickling an object.`
 Verify that you don't miss javascript/css files (tools/3rdparty.py)
 
+* `The capture took too long - Timeout 45000ms exceeded.`
+
 * Folder /var/_lookyloo/.cache/ms-playwright contains browser executables. Adapt if /var is mounted with noexec flag.
 
 * No capture happening?
