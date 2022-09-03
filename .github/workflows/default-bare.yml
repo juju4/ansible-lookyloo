@@ -93,6 +93,7 @@ jobs:
           systemctl -l --no-pager status lookyloo-web || true
           systemctl -l --no-pager status uwhoisd || true
           systemd-analyze --no-pager security || true
+          sudo find /etc/systemd/system/ -name 'lookyloo*' -exec cat {} \;
           rsyslogd -v
         if: ${{ always() }}
         continue-on-error: true
@@ -108,6 +109,15 @@ jobs:
           sudo ls -la /var/_lookyloo/redis/src/redis-server || true
         if: ${{ always() }}
         continue-on-error: true
+      - name: After script - poetry
+        run: |
+          set -x
+          cd /var/_lookyloo/lookyloo
+          sudo -H -u lookyloo /usr/local/share/poetry/bin/poetry show --tree
+          sudo -H -u lookyloo /usr/local/share/poetry/bin/poetry show --outdated
+          sudo -H -u lookyloo /usr/local/share/poetry/bin/poetry install --dry-run
+        if: ${{ always() }}
+        continue-on-error: true
       - name: After script - curl
         run: |
           curl -vL http://localhost:5100 || true
@@ -120,6 +130,7 @@ jobs:
         run: |
           set -x
           sudo find /var/log/ -name 'lookyloo*.log' -exec tail -100 {} \;
+          sudo find /var/log/ -name 'uwhoisd*.log' -exec tail -100 {} \;
           ls -la /var/log/
           sudo tail -200 /var/log/syslog
         if: ${{ always() }}
