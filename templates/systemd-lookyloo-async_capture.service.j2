@@ -6,7 +6,7 @@
 [Unit]
 Description=lookyloo async_capture
 Requires=network.target
-After=lookyloo-redis
+After=lookyloo-redis.service lookyloo-redis-indexing.service
 
 [Service]
 Type=simple
@@ -55,7 +55,7 @@ ProtectControlGroups=true
 LockPersonality=true
 RestrictRealtime=true
 RestrictNamespaces=yes
-RestrictNamespaces=~CLONE_NEWCGROUP CLONE_NEWIPC CLONE_NEWNET CLONE_NEWPID
+# RestrictNamespaces=~CLONE_NEWCGROUP CLONE_NEWIPC CLONE_NEWNET CLONE_NEWPID
 RestrictSUIDSGID=yes
 # "Check failed: reservation_.SetPermissions(protect_start, protect_size, permission).", "v8::internal::PagedSpace::SetReadAndExecutable()"
 # MemoryDenyWriteExecute=yes

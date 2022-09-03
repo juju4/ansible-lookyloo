@@ -6,12 +6,12 @@
 [Unit]
 Description=uWSGI instance to serve lookyloo
 Requires=network.target
-After=lookyloo-redis lookyloo-redis-indexing
+After=lookyloo-redis.service lookyloo-redis-indexing.service
 
 [Service]
 Type=simple
 ExecStart={{ venv_lookyloo.stdout }}/bin/gunicorn -w 10 --graceful-timeout 2 --timeout 300 -b {{ lookyloo_listen_ip }}:{{ lookyloo_listen_port }} --log-level info web:app
-WorkingDirectory={{ lookyloo_root }}
+WorkingDirectory={{ lookyloo_root }}/website
 Restart=on-failure
 RestartSec=15
 SyslogIdentifier=lookyloo-web
@@ -57,7 +57,8 @@ RestrictRealtime=true
 RestrictNamespaces=yes
 RestrictNamespaces=~CLONE_NEWCGROUP CLONE_NEWIPC CLONE_NEWNET CLONE_NEWPID
 RestrictSUIDSGID=yes
-MemoryDenyWriteExecute=yes
+# "Check failed: reservation_.SetPermissions(protect_start, protect_size, permission).", "v8::internal::PagedSpace::SetReadAndExecutable()"
+# MemoryDenyWriteExecute=yes
 
 # PrivateNetwork=yes
 RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
