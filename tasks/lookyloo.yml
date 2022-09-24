@@ -20,7 +20,7 @@
 - name: Poetry | use system git
   ansible.builtin.command: "poetry config experimental.system-git-client {{ lookyloo_poetry_system_git | bool | lower }} --local"
   args:
-    chdir: "{{ plookyloo_root }}"
+    chdir: "{{ lookyloo_root }}"
   environment:
     PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:{{ poetry_root }}/bin"
   when: poetry_git_sys.stdout != lookyloo_poetry_system_git | bool | lower
