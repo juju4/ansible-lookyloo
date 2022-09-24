@@ -14,7 +14,7 @@
 
 - name: Download install-poetry.py
   ansible.builtin.get_url:
-    url: https://install.python-poetry.org
+    url: "https://raw.githubusercontent.com/python-poetry/install.python-poetry.org/{{ lookyloo_poetry_install_version }}/install-poetry.py"
     dest: "{{ install_archives }}/install-poetry.py"
     mode: '0755'
     checksum: "{{ lookyloo_poetry_hash }}"
@@ -24,7 +24,7 @@
   become_user: "{{ lookyloo_user }}"
 
 - name: Execute install-poetry.py
-  ansible.builtin.command: "python3 {{ install_archives }}/install-poetry.py"
+  ansible.builtin.command: "python3 {{ install_archives }}/install-poetry.py{% if lookyloo_poetry_version | string %} --version {{ lookyloo_poetry_version }}{% endif %}"
   environment:
     POETRY_HOME: "{{ poetry_root }}"
   become: yes
