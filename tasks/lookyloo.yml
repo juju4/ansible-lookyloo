@@ -51,9 +51,9 @@
   register: poetry_install2
 
 - name: Ensure .env is configured
-  ansible.builtin.copy:
+  ansible.builtin.template:
+    src: env.j2
     dest: "{{ lookyloo_root }}/.env"
-    content: "LOOKYLOO_HOME=\"{{ lookyloo_root }}\""
     mode: '0644'
     owner: "{{ lookyloo_user }}"
     backup: "{{ lookyloo_backup }}"

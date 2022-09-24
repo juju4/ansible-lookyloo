@@ -36,7 +36,7 @@
     to_port: "{{ item }}"
   with_items: "{{ lookyloo_ufw_allow_ports_in }}"
 
-- name: UFW | allow {{ lookyloo_ufw_if }} outgoing traffic for defined ports
+- name: UFW | allow outgoing traffic for defined ports - {{ lookyloo_ufw_if }}
   community.general.ufw:
     rule: allow
     interface: "{{ lookyloo_ufw_if }}"
