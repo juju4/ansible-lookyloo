@@ -51,6 +51,7 @@
     creates: /var/_lookyloo/.cache/ms-playwright/chromium-1015/INSTALLATION_COMPLETE
   environment:
     PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:{{ poetry_root }}/bin"
+    XDG_CONFIG_HOME: "{{ lookyloo_home }}/.config"
   register: poetry_install2
 
 - name: Ensure .env is configured
