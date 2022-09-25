@@ -15,5 +15,6 @@
     # creates:
   environment:
     PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:{{ poetry_root }}/bin"
+    XDG_CONFIG_HOME: "{{ lookyloo_home }}/.config"
   register: poetry_install
   changed_when: "'No dependencies to install or update' not in poetry_install.stdout"
