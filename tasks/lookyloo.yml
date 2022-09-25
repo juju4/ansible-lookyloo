@@ -14,6 +14,7 @@
     chdir: "{{ lookyloo_root }}"
   environment:
     PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:{{ poetry_root }}/bin"
+    XDG_CONFIG_HOME: "{{ lookyloo_home }}/.config"
   changed_when: false
   register: poetry_git_sys
 
@@ -23,6 +24,7 @@
     chdir: "{{ lookyloo_root }}"
   environment:
     PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:{{ poetry_root }}/bin"
+    XDG_CONFIG_HOME: "{{ lookyloo_home }}/.config"
   when: poetry_git_sys.stdout != lookyloo_poetry_system_git | bool | lower
 
 - name: Install lookyloo
@@ -32,6 +34,7 @@
     # creates:
   environment:
     PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:{{ poetry_root }}/bin"
+    XDG_CONFIG_HOME: "{{ lookyloo_home }}/.config"
   register: poetry_install
   changed_when: "'No dependencies to install or update' not in poetry_install.stdout"
 
