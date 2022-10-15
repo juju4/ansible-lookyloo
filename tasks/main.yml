@@ -79,30 +79,37 @@
   become: yes
   become_user: root
 
-- import_tasks: poetry.yml
+- name: Import poetry
+  ansible.builtin.import_tasks: poetry.yml
   vars:
     poetry_user: "{{ lookyloo_user }}"
 
-- import_tasks: redis-source.yml
-- import_tasks: splash-container.yml
+- name: Import redis-source
+  ansible.builtin.import_tasks: redis-source.yml
+- name: Import splash-container
+  ansible.builtin.import_tasks: splash-container.yml
   when: not is_container and false
 
-- import_tasks: lookyloo.yml
+- name: Import lookyloo
+  ansible.builtin.import_tasks: lookyloo.yml
   become: yes
   become_user: "{{ lookyloo_user }}"
 
-- import_tasks: uwhoisd.yml
+- name: Import uwhoisd
+  ansible.builtin.import_tasks: uwhoisd.yml
   become: yes
   become_user: "{{ lookyloo_user }}"
 
-- import_tasks: firewall-ufw.yml
+- name: Import firewall-ufw
+  ansible.builtin.import_tasks: firewall-ufw.yml
   become: yes
   become_user: root
   when:
     - lookyloo_ufw|bool
     - not is_container
 
-- import_tasks: systemd.yml
+- name: Import systemd
+  ansible.builtin.import_tasks: systemd.yml
   become: yes
   become_user: root
   when:
