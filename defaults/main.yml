@@ -33,7 +33,7 @@ lookyloo_web_static:
   }
   - { u: 'https://d3js.org/d3.v7.min.js',
       d: 'd3.v7.min.js',
-      c: 'sha256:b384cf0baeec03aa9e1443fd670cd41c9ec984def9a7b4dbfd7ad2f197d5b573'
+      c: 'sha256:15f66b1d275c74d16c6399bc0be4db2d4a722991100ecdf08f7759d43b62fe30'
   }
   - { u: 'https://cdn.datatables.net/v/bs4/dt-1.12.1/datatables.min.js',
       d: 'datatables.min.js',
