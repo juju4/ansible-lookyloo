@@ -10,7 +10,7 @@ lookyloo_root: "{{ lookyloo_home }}/lookyloo"
 lookyloo_splash_image: scrapinghub/splash
 lookyloo_splash_version: 3.5.0
 poetry_root: /usr/local/share/poetry
-lookyloo_poetry_version: 1.2.1
+lookyloo_poetry_version: 1.3.1
 lookyloo_poetry_system_git: true
 lookyloo_uwhoisd_version: 92160a4e9e5fd9f8a18e3d4fa72fc1b1ab8cef9d
 
