@@ -4,16 +4,11 @@ name: default-bare
 on:
   push:
   pull_request:
-  workflow_dispatch:
   schedule:  # run weekly, every Thursday
     - cron: '40 2 * * 4'
 
-permissions: {}
-
 jobs:
   build:
-    permissions:
-      contents: read
     runs-on: ${{ matrix.os }}
     continue-on-error: ${{ matrix.experimental }}
     strategy:
@@ -30,11 +25,11 @@ jobs:
       ANSIBLE_EXTRA_VARS: ""
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
         with:
           path: juju4.lookyloo
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v2
         with:
           python-version: '3.x'
       - name: Install dependencies
@@ -140,3 +135,9 @@ jobs:
           sudo tail -200 /var/log/syslog
         if: ${{ always() }}
         continue-on-error: true
+      - name: After script - logs
+        run: |
+          set -x
+          sudo find /var/log/ -name 'lookyloo*.log' -exec grep -in error: {} \;
+          sudo find /var/log/ -name 'uwhoisd*.log' -exec grep -in error: {} \;
+        if: ${{ always() }}
