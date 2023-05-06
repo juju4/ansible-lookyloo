@@ -36,6 +36,7 @@
     name: uwhoisd
     state: started
     enabled: yes
+  failed_when: false
 
 - name: Ensure redis does not daemonize
   ansible.builtin.replace:
@@ -59,7 +60,7 @@
   notify:
     - Restart lookyloo-redis-indexing
 
-- name: Configure pandora systemd units
+- name: Configure lookyloo systemd units
   ansible.builtin.template:
     src: "systemd-{{ item }}.service.j2"
     dest: "/etc/systemd/system/{{ item }}.service"
@@ -72,7 +73,7 @@
 - name: Flush handlers
   ansible.builtin.meta: flush_handlers
 
-- name: Enable and start pandora services
+- name: Enable and start lookyloo services
   ansible.builtin.service:
     name: "{{ item }}"
     state: started
