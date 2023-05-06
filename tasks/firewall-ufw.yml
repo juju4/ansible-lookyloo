@@ -50,6 +50,18 @@
     rule: allow
     interface: "{{ lookyloo_ufw_if }}"
     direction: out
+    proto: tcp
+    dest: "{{ lookyloo_webproxy_host }}"
+    to_port: "{{ lookyloo_webproxy_port }}"
+  when:
+    - lookyloo_webproxy_host|string
+    - lookyloo_webproxy_port|string
+
+- name: UFW | allow outgoing traffic for defined ports - {{ lookyloo_ufw_if }}
+  community.general.ufw:
+    rule: allow
+    interface: "{{ lookyloo_ufw_if }}"
+    direction: out
     to_port: "{{ item }}"
     log: "{{ lookyloo_ufw_out_logging }}"
   with_items: "{{ lookyloo_ufw_allow_ports_out }}"

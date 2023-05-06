@@ -91,6 +91,8 @@ lookyloo_ufw_out_logging: no
 lookyloo_ufw_allow_ports_out:
   # - '22'
   # - '25'
+  # whois
+  - '43'
   - '53'
   - '123'
   ## email/TLS?
@@ -105,5 +107,8 @@ lookyloo_ufw_allow_ports_out:
   # - '67'
 
 lookyloo_ufw_allow_if_out: []
+
+lookyloo_webproxy_host: ''
+lookyloo_webproxy_port: ''
 
 is_container: false
