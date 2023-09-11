@@ -30,7 +30,7 @@ jobs:
       ANSIBLE_EXTRA_VARS: "-e lookyloo_version=HEAD"
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           path: juju4.lookyloo
       - name: Set up Python
