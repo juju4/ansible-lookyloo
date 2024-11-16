@@ -30,5 +30,6 @@ lookyloo_pkgs:
   - libxrandr2
   - libasound2
   - libwayland-client0
+  - ffmpeg
 
 ufw_rulename_ssh: OpenSSH
