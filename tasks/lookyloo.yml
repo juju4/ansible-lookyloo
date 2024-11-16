@@ -45,6 +45,18 @@
   changed_when: false
   failed_when: venv_lookyloo.rc != 0
 
+- name: Get installed poetry packages
+  ansible.builtin.command:
+    cmd: /usr/local/share/poetry/bin/poetry install --dry-run
+  args:
+    chdir: "{{ lookyloo_root }}"
+  environment:
+    PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:{{ poetry_root }}/bin"
+    XDG_CONFIG_HOME: "{{ lookyloo_home }}/.config"
+  changed_when: false
+  failed_when: false
+  register: poetry_list
+
 - name: Install playwright
   ansible.builtin.command: poetry run playwright install
   args:
@@ -54,6 +66,8 @@
     PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:{{ poetry_root }}/bin"
     XDG_CONFIG_HOME: "{{ lookyloo_home }}/.config"
   register: poetry_install2
+  when:
+    - "'playwrightcapture' not in poetry_list"
 
 - name: Ensure .env is configured
   ansible.builtin.template:
