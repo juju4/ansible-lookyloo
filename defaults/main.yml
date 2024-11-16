@@ -1,8 +1,9 @@
 ---
 
-lookyloo_version: c674a45d13692038cfdbc0b1ed3c3568bf18087b
-lookyloo_poetry_install_version: e8d8f76750e1abaebd628e2323a49163d102c9d6
-lookyloo_poetry_hash: 'sha256:08a38ab8de719d4012af4d62c37ce09e84edce6e1c4da7c5ccbcade359312c8b'
+# 1.27.0
+lookyloo_version: 50c29f17dd51a8f1099a6d6c8263eae926d0df38
+lookyloo_poetry_install_version: fcd759d6feb9142736a19f8a753be975a120be87
+lookyloo_poetry_hash: 'sha256:66db5477a597b6176202ef77792076057ce50d2c5a2d2d2978c63e1f144d7b95'
 lookyloo_user: _lookyloo
 # lookyloo_user_groups: docker
 lookyloo_home: /var/_lookyloo
@@ -10,9 +11,9 @@ lookyloo_root: "{{ lookyloo_home }}/lookyloo"
 lookyloo_splash_image: scrapinghub/splash
 lookyloo_splash_version: 3.5.0
 poetry_root: /usr/local/share/poetry
-lookyloo_poetry_version: 1.3.1
+lookyloo_poetry_version: 1.8.4
 lookyloo_poetry_system_git: true
-lookyloo_uwhoisd_version: 92160a4e9e5fd9f8a18e3d4fa72fc1b1ab8cef9d
+lookyloo_uwhoisd_version: 44e29cc32ea85b8fce8857c4e97c45474db06fa8
 
 lookyloo_listen_ip: 0.0.0.0
 lookyloo_listen_port: 5100
