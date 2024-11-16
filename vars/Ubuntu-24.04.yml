@@ -28,7 +28,7 @@ lookyloo_pkgs:
   - libxcomposite1
   - libxfixes3
   - libxrandr2
-  - libasound2
+  - libasound2t64
   - libwayland-client0
 
 ufw_rulename_ssh: OpenSSH
