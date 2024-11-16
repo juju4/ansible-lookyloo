@@ -121,6 +121,8 @@ jobs:
           sudo ls -la /var/_lookyloo/
           sudo ls -la /var/_lookyloo/redis
           sudo ls -la /var/_lookyloo/lookyloo
+          sudo ls -la /var/_lookyloo/lookyloo/bin
+          sudo find /var/_lookyloo/.cache/pypoetry/virtualenvs/ -ipath '/bin/' -ls
           sudo cat /var/_lookyloo/lookyloo/config/generic.json
           sudo cat /var/_lookyloo/lookyloo/cache/cache.conf
           sudo cat /var/_lookyloo/lookyloo/indexing/indexing.conf
