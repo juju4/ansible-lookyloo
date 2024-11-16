@@ -24,7 +24,7 @@ jobs:
           - distribution: ubuntu
             version: '24.04'
             suite: default
-            experimental: false
+            experimental: true
           - distribution: ubuntu
             version: '22.04'
             suite: default
@@ -131,9 +131,9 @@ jobs:
         run: |
           set -x
           cd /var/_lookyloo/lookyloo
-          sudo -H -u lookyloo /usr/local/share/poetry/bin/poetry show --tree
-          sudo -H -u lookyloo /usr/local/share/poetry/bin/poetry show --outdated
-          sudo -H -u lookyloo /usr/local/share/poetry/bin/poetry install --dry-run
+          sudo -H -u _lookyloo /usr/local/share/poetry/bin/poetry show --tree
+          sudo -H -u _lookyloo /usr/local/share/poetry/bin/poetry show --outdated
+          sudo -H -u _lookyloo /usr/local/share/poetry/bin/poetry install --dry-run
         if: ${{ always() }}
         continue-on-error: true
       - name: After script - curl
