@@ -74,6 +74,8 @@
         that:
           - sock1.stat.exists
           - sock1.stat.issock != 0
+      when:
+        - not is_container|bool
 
     - name: Check lookyloo socket 2
       ansible.builtin.stat:
@@ -84,6 +86,8 @@
         that:
           - sock2.stat.exists
           - sock2.stat.issock != 0
+      when:
+        - not is_container|bool
 
     - name: Ensure lookyloo processes are running
       ansible.builtin.command: pgrep -u _lookyloo gunicorn
