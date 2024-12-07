@@ -144,6 +144,7 @@ jobs:
       - name: After script - curl
         run: |
           curl -vL http://localhost:5100 || true
+          curl -vL http://localhost:5100/index || true
           curl -vL "http://localhost:5100/capture?url=https://duckduckgo.com" || true
           curl -vL "http://localhost:5100/whois/duckduckgo.com" || true
           sleep 30
@@ -156,5 +157,8 @@ jobs:
           sudo find /var/log/ -name 'uwhoisd*.log' -exec tail -100 {} \;
           ls -la /var/log/
           sudo tail -200 /var/log/syslog
+          sudo tail -n20 /var/log/lookyloo-*.log
+          ls -la /var/_lookyloo/lookyloo/logs/
+          tail -n20 /var/_lookyloo/lookyloo/logs/*.log
         if: ${{ always() }}
         continue-on-error: true
