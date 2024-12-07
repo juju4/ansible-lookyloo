@@ -76,6 +76,8 @@ But manual capture in WebUI works.
 Anyway, Lookyloo has switch to its own capture tool [playwright](https://github.com/Lookyloo/PlaywrightCapture) since [Apr 2022](https://github.com/Lookyloo/lookyloo/commit/8d159ffba098c624b7e6216fed54b2c6638d442a)
 scrapinghub/splash [latest upstream docker](https://hub.docker.com/r/scrapinghub/splash/tags) is from Aug 2020 and based on Ubuntu 20.04 (bionic) which will be [EOL in Apr 2023](https://ubuntu.com/about/release-cycle). Also, considering issue and pull requests, it is uncertain if [splash repository](https://github.com/scrapinghub/splash/) is still maintained.
 
+* if git clone fails with "error: RPC failed; curl 92 HTTP/2 stream 5 was not closed cleanly: CANCEL (err 8)", try `git config --global http.version HTTP/1.1`
+
 ## License
 
 BSD 2-clause
