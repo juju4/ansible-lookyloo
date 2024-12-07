@@ -18,3 +18,14 @@
     XDG_CONFIG_HOME: "{{ lookyloo_home }}/.config"
   register: poetry_install
   changed_when: "'No dependencies to install or update' not in poetry_install.stdout"
+
+- name: Use sample config
+  ansible.builtin.copy:
+    src: "{{ lookyloo_home }}/uwhoisd/config/{{ item }}.sample"
+    dest: "{{ lookyloo_home }}/uwhoisd/config/{{ item }}"
+    mode: '0644'
+    owner: "{{ lookyloo_user }}"
+    remote_src: true
+  loop:
+    - generic.json
+    - logging.json

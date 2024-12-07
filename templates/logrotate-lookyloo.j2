@@ -1,0 +1,22 @@
+{{ ansible_managed | comment }}
+
+## /etc/logrotate.d/lookyloo
+
+/var/log/lookyloo*.log {
+    rotate {{ lookyloo_logrotate_rotate|int }}
+    {{ lookyloo_logrotate_period }}
+{% if lookyloo_logrotate_datext %}
+    dateext
+    dateformat {{ lookyloo_logrotate_datformat }}
+{% endif%}
+    missingok
+    notifempty
+{% if lookyloo_logrotate_compress %}
+    compress
+    delaycompress
+{% endif %}
+    missingok
+    notifempty
+    copytruncate
+    create 0640 _lookyloo root
+}

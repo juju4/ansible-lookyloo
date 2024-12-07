@@ -7,10 +7,13 @@ User={{ lookyloo_user }}
 Group={{ lookyloo_user }}
 Type=forking
 WorkingDirectory={{ lookyloo_home }}/uwhoisd
-Environment=PATH=/usr/sbin:/usr/bin:/sbin:/bin:{{ poetry_root }}/bin
+Environment=PATH={{ venv_lookyloo.stdout }}/bin:/usr/sbin:/usr/bin:/sbin:/bin:{{ poetry_root }}/bin
 Environment="UWHOISD_HOME={{ lookyloo_home }}/uwhoisd"
-ExecStart=/bin/bash -c "exec poetry run start"
-ExecStop=/bin/bash -c "exec poetry run stop"
+{% if lookyloo_webproxy_host is defined and lookyloo_webproxy_host | string and lookyloo_webproxy_port is defined and lookyloo_webproxy_port | string %}
+EnvironmentFile=/etc/environment
+{% endif %}
+ExecStart=/bin/bash -c "exec /usr/local/share/poetry/venv/bin/poetry run start"
+ExecStop=/bin/bash -c "exec /usr/local/share/poetry/venv/bin/poetry run stop"
 StandardOutput=append:/var/log/uwhoisd_message.log
 StandardError=append:/var/log/uwhoisd_error.log
 

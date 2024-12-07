@@ -10,7 +10,7 @@ Requires=network.target
 [Service]
 Type=simple
 # https://github.com/lookyloo-analysis/lookyloo/blob/main/indexing/run_redis.sh
-ExecStart={{ lookyloo_home }}/redis/src/redis-server {{ lookyloo_root }}/indexing/indexing.conf
+ExecStart={{ lookyloo_home }}/valkey/src/valkey-server {{ lookyloo_root }}/indexing/indexing.conf
 WorkingDirectory={{ lookyloo_root }}/indexing
 Restart=on-failure
 RestartSec=15
@@ -103,9 +103,9 @@ SystemCallErrorNumber=EPERM
 SystemCallArchitectures=native
 
 {% if lookyloo_cgroups_restriction_enable|bool %}
-CPUShares={{ lookyloo_cgroups_cpushares | default('1024') }}
+CPUWeight={{ lookyloo_cgroups_cpushares | default('1024') }}
 CPUQuota={{ lookyloo_cgroups_cpuquota | default('80%') }}
-MemoryLimit={{ lookyloo_cgroups_memorylimit | default('4G') }}
+MemoryMax={{ lookyloo_cgroups_memorylimit | default('4G') }}
 {% endif %}
 
 [Install]

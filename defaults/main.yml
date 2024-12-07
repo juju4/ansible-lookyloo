@@ -14,6 +14,7 @@ poetry_root: /usr/local/share/poetry
 lookyloo_poetry_version: 1.8.4
 lookyloo_poetry_system_git: true
 lookyloo_uwhoisd_version: 44e29cc32ea85b8fce8857c4e97c45474db06fa8
+lookyloo_valkey_version: 4fbab5740bfef66918d6c2950dd2b3b4e07815a2  # 8.0.1
 
 lookyloo_listen_ip: 0.0.0.0
 lookyloo_listen_port: 5100
@@ -36,7 +37,7 @@ lookyloo_web_static:
     # official download has no fixed version, using cdnjs
     # u: 'https://d3js.org/d3.v7.min.js',
     u: 'https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js',
-    d: 'd3.v7.min.js',
+    d: 'd3.min.js',
     c: 'sha256:f2094bbf6141b359722c4fe454eb6c4b0f0e42cc10cc7af921fc158fceb86539'
   }
   - { u: 'https://cdn.datatables.net/v/bs4/dt-2.1.8/datatables.min.js',
@@ -109,6 +110,7 @@ lookyloo_ufw_allow_ports_out:
 
 lookyloo_ufw_allow_if_out: []
 
+# web proxy? must also be configured in /etc/environment
 lookyloo_webproxy_host: ''
 lookyloo_webproxy_port: ''
 

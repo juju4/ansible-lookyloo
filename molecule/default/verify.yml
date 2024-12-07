@@ -5,17 +5,14 @@
   gather_facts: true
   vars:
     lookyloo_start: /var/_lookyloo/lookyloo/bin/start.py
-    binary_redis: /var/_lookyloo/redis/src/redis-server
+    binary_redis: /var/_lookyloo/valkey/src/valkey-server
     config: /var/_lookyloo/lookyloo/config/generic.json
     ports:
       # lookyloo gunicorn
       - { h: 0.0.0.0, p: 5100 }
-      # splash container
-      # - { h: localhost, p: 5023 }
-      # - { h: localhost, p: 8050 }
     url: http://localhost:5100
-    splash_url: http://localhost:8050/render.html?url=http://www.google.com&timeout=10
     is_container: false
+    has_nginx: false
   pre_tasks:
     - name: Debug | var ansible_virtualization_type
       ansible.builtin.debug:
@@ -27,6 +24,15 @@
         (ansible_virtualization_type is defined and
           (ansible_virtualization_type == "docker" or ansible_virtualization_type == "containerd")
         )
+    - name: Check if nginx is present
+      ansible.builtin.stat:
+        path: /etc/nginx/sites-enabled/https
+      register: nginx_conf
+    - name: Set fact has_nginx
+      ansible.builtin.set_fact:
+        has_nginx: true
+      when:
+        - nginx_conf.stat.exists
   tasks:
     - name: Gather package facts
       ansible.builtin.package_facts:
@@ -58,6 +64,26 @@
     - name: Validate lookyloo configuration files are present
       ansible.builtin.assert:
         that: cfg1.stat.exists and cfg1.stat.size != 0
+
+    - name: Check lookyloo socket
+      ansible.builtin.stat:
+        path: /var/_lookyloo/lookyloo/cache/cache.sock
+      register: sock1
+    - name: Validate lookyloo socket
+      ansible.builtin.assert:
+        that:
+          - sock1.stat.exists
+          - sock1.stat.issock != 0
+
+    - name: Check lookyloo socket 2
+      ansible.builtin.stat:
+        path: /var/_lookyloo/lookyloo/indexing/indexing.sock
+      register: sock2
+    - name: Validate lookyloo socket
+      ansible.builtin.assert:
+        that:
+          - sock2.stat.exists
+          - sock2.stat.issock != 0
 
     - name: Ensure lookyloo processes are running
       ansible.builtin.command: pgrep -u _lookyloo gunicorn
@@ -102,17 +128,57 @@
       when:
         - not is_container|bool
 
-    - name: Fetch localhost endpoint - splash
-      ansible.builtin.uri:
-        url: "{{ splash_url }}"
-        validate_certs: no
-        return_content: yes
-      register: web
+    - name: Logs check
+      ansible.builtin.shell:
+        cmd: |
+          set -o pipefail
+          grep -rin error /var/_lookyloo/lookyloo/logs/ | tail -20
+      register: logs2
+      changed_when: false
       failed_when: false
-      when: false
-    - name: Validate localhost endpoint - splash
-      ansible.builtin.assert:
-        that:
-          - web.status != -1
-          - "'This is failing...' in web.content"
-      when: not is_container | bool and false
+
+    - name: Service logs check
+      ansible.builtin.shell:
+        cmd: |
+          set -o pipefail
+          grep -i error /var/log/lookyloo-* | tail -20
+      register: logs2
+      changed_when: false
+      failed_when: false
+
+    - name: Uwhoisd logs check
+      ansible.builtin.shell:
+        cmd: |
+          set -o pipefail
+          grep -i error /var/log/uwhoisd_* | tail -20
+      register: logs3
+      changed_when: false
+      failed_when: false
+
+    - name: Nginx
+      when:
+        - has_nginx | bool
+        - not is_container|bool
+      block:
+        - name: Ensure nginx port is listening
+          ansible.builtin.wait_for:
+            host: 0.0.0.0
+            port: 443
+            timeout: 10
+        - name: Fetch nginx endpoint
+          ansible.builtin.uri:
+            url: https://localhost
+            validate_certs: no
+            return_content: yes
+          register: web2
+          failed_when: false
+        - name: Validate nginx endpoint
+          ansible.builtin.assert:
+            that: >
+              "'lookyloo' in web2.content"
+
+    - name: Logs
+      ansible.builtin.debug:
+        msg: "WARNING! Error messages in logs"
+      when: >
+        "'ERROR' in logs1.stdout or 'ERROR' in logs2.stdout or 'ERROR' in logs3.stdout"

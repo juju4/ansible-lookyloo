@@ -9,18 +9,18 @@
   become: yes
   become_user: root
 
-- name: Clone redis repository
+- name: Clone valkey repository
   ansible.builtin.git:
-    repo: https://github.com/redis/redis.git
-    dest: "{{ lookyloo_home }}/redis"
-    version: 6.2
+    repo: https://github.com/valkey-io/valkey.git
+    dest: "{{ lookyloo_home }}/valkey"
+    version: "{{ lookyloo_valkey_version }}"
   become: yes
   become_user: "{{ lookyloo_user }}"
 
-- name: Build redis
+- name: Build valkey
   ansible.builtin.command: make
   args:
-    chdir: "{{ lookyloo_home }}/redis"
-    creates: "{{ lookyloo_home }}/redis/src/redis-server"
+    chdir: "{{ lookyloo_home }}/valkey"
+    creates: "{{ lookyloo_home }}/valkey/src/valkey-server"
   become: yes
   become_user: "{{ lookyloo_user }}"

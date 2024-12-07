@@ -56,7 +56,7 @@
     home: "{{ lookyloo_home }}"
     system: true
     groups: "{{ lookyloo_user_groups | default(omit) }}"
-    append: yes
+    append: "{% if lookyloo_user_groups is defined and lookyloo_user_groups | length > 0 %}yes{% else %}no{% endif %}"
   become: yes
   become_user: root
 
@@ -94,6 +94,14 @@
   ansible.builtin.import_tasks: lookyloo.yml
   become: yes
   become_user: "{{ lookyloo_user }}"
+
+- name: Ensure logrotate is configured
+  ansible.builtin.template:
+    src: logrotate-lookyloo.j2
+    dest: /etc/logrotate.d/lookyloo
+    mode: '0644'
+    owner: root
+    backup: "{{ lookyloo_backup }}"
 
 - name: Import uwhoisd
   ansible.builtin.import_tasks: uwhoisd.yml

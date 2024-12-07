@@ -20,6 +20,9 @@ StandardError=append:/var/log/lookyloo-web_error.log
 User={{ lookyloo_user }}
 Group={{ lookyloo_user }}
 Environment=PATH={{ venv_lookyloo.stdout }}/bin:/usr/sbin:/usr/bin:/sbin:/bin:{{ poetry_root }}/bin
+{% if lookyloo_webproxy_host is defined and lookyloo_webproxy_host | string and lookyloo_webproxy_port is defined and lookyloo_webproxy_port | string %}
+EnvironmentFile=/etc/environment
+{% endif %}
 
 # Reduce Attack Surface
 NoNewPrivileges=yes
@@ -55,7 +58,7 @@ ProtectControlGroups=true
 LockPersonality=true
 RestrictRealtime=true
 RestrictNamespaces=yes
-RestrictNamespaces=~CLONE_NEWCGROUP CLONE_NEWIPC CLONE_NEWNET CLONE_NEWPID
+# RestrictNamespaces=~CLONE_NEWCGROUP CLONE_NEWIPC CLONE_NEWNET CLONE_NEWPID
 RestrictSUIDSGID=yes
 # "Check failed: reservation_.SetPermissions(protect_start, protect_size, permission).", "v8::internal::PagedSpace::SetReadAndExecutable()"
 # MemoryDenyWriteExecute=yes
@@ -64,6 +67,7 @@ RestrictSUIDSGID=yes
 RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
 
 IPAccounting=yes
+# If using below and a proxy exists, ensure to include it.
 # IPAddressAllow=localhost link-local multicast 10.0.0.0/8 192.168.0.0/16
 
 CapabilityBoundingSet=~CAP_AUDIT_CONTROL CAP_AUDIT_READ CAP_DAC_READ_SEARCH
@@ -104,9 +108,9 @@ SystemCallErrorNumber=EPERM
 SystemCallArchitectures=native
 
 {% if lookyloo_cgroups_restriction_enable|bool %}
-CPUShares={{ lookyloo_cgroups_cpushares | default('1024') }}
+CPUWeight={{ lookyloo_cgroups_cpushares | default('1024') }}
 CPUQuota={{ lookyloo_cgroups_cpuquota | default('80%') }}
-MemoryLimit={{ lookyloo_cgroups_memorylimit | default('4G') }}
+MemoryMax={{ lookyloo_cgroups_memorylimit | default('4G') }}
 {% endif %}
 
 [Install]

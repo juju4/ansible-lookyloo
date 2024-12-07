@@ -76,6 +76,14 @@
     mode: '0644'
     owner: "{{ lookyloo_user }}"
     backup: "{{ lookyloo_backup }}"
+  notify:
+    - Restart lookyloo-archiver
+    - Restart lookyloo-async_capture
+    - Restart lookyloo-background_indexer
+    - Restart lookyloo-background_processing
+    - Restart lookyloo-redis
+    - Restart lookyloo-redis-indexing
+    - Restart lookyloo-web
 
 - name: Ensure config.json is configured
   ansible.builtin.template:
@@ -84,6 +92,14 @@
     mode: '0644'
     owner: "{{ lookyloo_user }}"
     backup: "{{ lookyloo_backup }}"
+  notify:
+    - Restart lookyloo-archiver
+    - Restart lookyloo-async_capture
+    - Restart lookyloo-background_indexer
+    - Restart lookyloo-background_processing
+    - Restart lookyloo-redis
+    - Restart lookyloo-redis-indexing
+    - Restart lookyloo-web
 
 - name: Ensure modules.json is configured
   ansible.builtin.template:
@@ -92,6 +108,39 @@
     mode: '0644'
     owner: "{{ lookyloo_user }}"
     backup: "{{ lookyloo_backup }}"
+  notify:
+    - Restart lookyloo-archiver
+    - Restart lookyloo-async_capture
+    - Restart lookyloo-background_indexer
+    - Restart lookyloo-background_processing
+    - Restart lookyloo-redis
+    - Restart lookyloo-redis-indexing
+    - Restart lookyloo-web
+
+- name: Ensure logging.json is configured
+  ansible.builtin.template:
+    src: logging.json.j2
+    dest: "{{ lookyloo_root }}/config/logging.json"
+    mode: '0644'
+    owner: "{{ lookyloo_user }}"
+    backup: "{{ lookyloo_backup }}"
+  notify:
+    - Restart lookyloo-archiver
+    - Restart lookyloo-async_capture
+    - Restart lookyloo-background_indexer
+    - Restart lookyloo-background_processing
+    - Restart lookyloo-redis
+    - Restart lookyloo-redis-indexing
+    - Restart lookyloo-web
+
+- name: Validate config files are valid json
+  ansible.builtin.shell:
+    cmd: "python3 -mjson.tool {{ item }} > /dev/null"
+  loop:
+    - "{{ lookyloo_root }}/config/generic.json"
+    - "{{ lookyloo_root }}/config/logging.json"
+    - "{{ lookyloo_root }}/config/modules.json"
+  changed_when: false
 
 - name: Ensure working git pull
   ansible.builtin.replace:
@@ -148,5 +197,3 @@
     - zset-max-listpack-entries
     - zset-max-listpack-value
   when: lookyloo_version == 'HEAD'
-
-# /var/_lookyloo/lookyloo/etc/logrotate.d/lookyloo
