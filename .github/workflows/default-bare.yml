@@ -57,7 +57,7 @@ jobs:
           cd $GITHUB_WORKSPACE/$ANSIBLE_ROLE
           [ -f molecule/$ANSIBLE_SUITE/requirements.yml ] && ansible-galaxy install -r molecule/$ANSIBLE_SUITE/requirements.yml
           [ -f get-dependencies.sh ] && sh -x get-dependencies.sh
-          { echo '[defaults]'; echo 'callback_enabled = profile_tasks, timer'; echo 'roles_path = ../'; echo 'ansible_python_interpreter: /usr/bin/python3'; } >> ansible.cfg
+          { echo '[defaults]'; echo 'callbacks_enabled = profile_tasks, timer'; echo 'roles_path = ../'; echo 'ansible_python_interpreter: /usr/bin/python3'; } >> ansible.cfg
       - name: Environment
         run: |
           set -x
@@ -160,5 +160,12 @@ jobs:
           sudo tail -n20 /var/log/lookyloo-*.log
           ls -la /var/_lookyloo/lookyloo/logs/
           tail -n20 /var/_lookyloo/lookyloo/logs/*.log
+        if: ${{ always() }}
+        continue-on-error: true
+      - name: After script - playwright
+        run: |
+          set -x
+          sudo -u _lookyloo playwright screenshot https://github.com /tmp/test.png || true
+          file /tmp/test.png || true
         if: ${{ always() }}
         continue-on-error: true

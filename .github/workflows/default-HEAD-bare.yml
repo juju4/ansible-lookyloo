@@ -158,3 +158,10 @@ jobs:
           sudo tail -200 /var/log/syslog
         if: ${{ always() }}
         continue-on-error: true
+      - name: After script - playwright
+        run: |
+          set -x
+          sudo -u _lookyloo playwright screenshot https://github.com /tmp/test.png || true
+          file /tmp/test.png || true
+        if: ${{ always() }}
+        continue-on-error: true
