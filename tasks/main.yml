@@ -102,6 +102,8 @@
     mode: '0644'
     owner: root
     backup: "{{ lookyloo_backup }}"
+  become: yes
+  become_user: root
 
 - name: Import uwhoisd
   ansible.builtin.import_tasks: uwhoisd.yml
