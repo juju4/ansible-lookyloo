@@ -50,6 +50,7 @@ lookyloo_web_static:
   }
 
 lookyloo_cgroups_restriction_enable: true
+lookyloo_systemd_hardening_enable: true
 lookyloo_systemd_units:
   - lookyloo-redis
   - lookyloo-redis-indexing

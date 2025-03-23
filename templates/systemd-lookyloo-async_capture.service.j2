@@ -21,6 +21,7 @@ User={{ lookyloo_user }}
 Group={{ lookyloo_user }}
 Environment=PATH={{ venv_lookyloo.stdout }}/bin:/usr/sbin:/usr/bin:/sbin:/bin:{{ poetry_root }}/bin
 
+{% if lookyloo_systemd_hardening_enable | bool %}
 # Reduce Attack Surface
 NoNewPrivileges=yes
 PrivateTmp=true
@@ -107,6 +108,8 @@ SystemCallArchitectures=native
 CPUWeight={{ lookyloo_cgroups_cpushares | default('1024') }}
 CPUQuota={{ lookyloo_cgroups_cpuquota | default('80%') }}
 MemoryMax={{ lookyloo_cgroups_memorylimit | default('4G') }}
+IOWeight={{ lookyloo_cgroups_ioweight | default('100') }}
+{% endif %}
 {% endif %}
 
 [Install]
