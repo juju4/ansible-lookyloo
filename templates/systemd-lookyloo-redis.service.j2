@@ -29,9 +29,7 @@ PrivateTmp=true
 ProtectHome=yes
 ProtectSystem=yes
 # ProtectSystem=strict
-{% if ansible_distribution == 'Ubuntu' and ansible_distribution_major_version|int >= 21 %}
 ProtectProc=noaccess
-{% endif %}
 
 PrivateDevices=yes
 DeviceAllow=
@@ -44,13 +42,9 @@ InaccessiblePaths=/proc
 
 ProtectKernelTunables=true
 ProtectKernelModules=yes
-{% if (ansible_distribution == 'Ubuntu' and ansible_distribution_major_version|int >= 20) or
-      (ansible_os_family == 'RedHat' and ansible_distribution_major_version|int > 8 )
-%}
 ProtectKernelLogs=yes
 ProtectHostname=yes
 ProtectClock=yes
-{% endif %}
 
 ProtectControlGroups=true
 LockPersonality=true
@@ -89,26 +83,24 @@ CapabilityBoundingSet=~CAP_FSETID CAP_SETFCAP
 CapabilityBoundingSet=~CAP_NET_RAW
 CapabilityBoundingSet=~CAP_IPC_LOCK
 
-{% if not (ansible_virtualization_type is defined and
-          ansible_virtualization_type == "docker"
-        )
+{%     if not (ansible_virtualization_type is defined and
+               ansible_virtualization_type == "docker"
+              )
 %}
-{% if (ansible_os_family == 'RedHat' and ansible_distribution_major_version|int >= 8) or (ansible_distribution == "Ubuntu" and ansible_distribution_major_version|int > 18) %}
 SystemCallFilter=@system-service
-{% endif %}
 # SystemCallFilter=~@debug @mount @cpu-emulation @obsolete @privileged @resources @reboot @swap @raw-io @module
 SystemCallFilter=~@debug @mount @cpu-emulation @obsolete @resources @reboot @swap @raw-io @module
 # When system call is disallowed, return error code instead of killing process
 SystemCallErrorNumber=EPERM
-{% endif %}
+{%     endif %}
 SystemCallArchitectures=native
 
-{% if lookyloo_cgroups_restriction_enable|bool %}
+{%     if lookyloo_cgroups_restriction_enable | bool %}
 CPUWeight={{ lookyloo_cgroups_cpushares | default('1024') }}
 CPUQuota={{ lookyloo_cgroups_cpuquota | default('80%') }}
 MemoryMax={{ lookyloo_cgroups_memorylimit | default('4G') }}
 IOWeight={{ lookyloo_cgroups_ioweight | default('100') }}
-{% endif %}
+{%     endif %}
 {% endif %}
 
 [Install]
