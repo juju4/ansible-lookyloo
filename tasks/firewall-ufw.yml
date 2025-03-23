@@ -54,6 +54,7 @@
     dest: "{{ lookyloo_webproxy_host }}"
     to_port: "{{ lookyloo_webproxy_port }}"
   when:
+    - lookyloo_webproxy_host != None
     - lookyloo_webproxy_host|string
     - lookyloo_webproxy_port|string
 
