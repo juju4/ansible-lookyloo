@@ -67,6 +67,16 @@
     log: "{{ lookyloo_ufw_out_logging }}"
   with_items: "{{ lookyloo_ufw_allow_ports_out }}"
 
+- name: UFW | allow outgoing traffic - custom
+  community.general.ufw:
+    rule: allow
+    interface: "{{ lookyloo_ufw_if }}"
+    direction: out
+    dest: "{{ item.dest }}"
+    to_port: "{{ item.to_port }}"
+    log: "{{ item.log }}"
+  loop: "{{ lookyloo_ufw_out_custom_rules }}"
+
 - name: UFW | allow all outgoing traffic for defined interfaces
   community.general.ufw:
     rule: "allow"

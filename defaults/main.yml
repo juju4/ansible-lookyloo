@@ -110,6 +110,7 @@ lookyloo_ufw_allow_ports_out:
   # - '67'
 
 lookyloo_ufw_allow_if_out: []
+lookyloo_ufw_out_custom_rules: []
 
 # web proxy? must also be configured in /etc/environment
 lookyloo_webproxy_host: ''
