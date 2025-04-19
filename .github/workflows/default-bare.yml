@@ -147,6 +147,7 @@ jobs:
           curl -vL http://localhost:5100/index || true
           curl -vL "http://localhost:5100/capture?url=https://duckduckgo.com" || true
           curl -vL "http://localhost:5100/whois/duckduckgo.com" || true
+          curl -X 'GET' 'http://localhost:5100/json/stats' -H 'accept: application/json' || true
           sleep 30
         if: ${{ always() }}
         continue-on-error: true
@@ -167,5 +168,11 @@ jobs:
           set -x
           sudo -u _lookyloo playwright screenshot https://github.com /tmp/test.png || true
           file /tmp/test.png || true
+        if: ${{ always() }}
+        continue-on-error: true
+      - name: After script - pylookyloo
+        run: |
+          set -x
+          sudo -u _lookyloo bash -c 'cd /var/_lookyloo/pylookyloo && poetry run pytest tests/testing*.py' || true
         if: ${{ always() }}
         continue-on-error: true

@@ -124,3 +124,11 @@
   become_user: root
   when:
     - not is_container
+
+- name: Import pylookyloo
+  ansible.builtin.import_tasks: pylookyloo.yml
+  become: yes
+  become_flags: -H
+  become_user: "{{ lookyloo_user }}"
+  when:
+    - lookyloo_pylookyloo_enable | bool

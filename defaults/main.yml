@@ -116,4 +116,9 @@ lookyloo_ufw_out_custom_rules: []
 lookyloo_webproxy_host: ''
 lookyloo_webproxy_port: ''
 
+lookyloo_pylookyloo_enable: true
+lookyloo_pylookyloo_version: v1.28.1
+lookyloo_pylookyloo_tests_enable: false
+lookyloo_pylookyloo_tests_url: 'https://rafiot.eu.pythonanywhere.com'
+
 is_container: false

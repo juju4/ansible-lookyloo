@@ -1,0 +1,38 @@
+---
+
+- name: Git clone pylookyloo repository
+  ansible.builtin.git:
+    repo: https://github.com/Lookyloo/PyLookyloo.git
+    dest: "{{ lookyloo_home }}/pylookyloo"
+    version: "{{ lookyloo_pylookyloo_version }}"
+    update: no
+    force: no
+
+- name: Install pylookyloo
+  ansible.builtin.command: poetry install
+  args:
+    chdir: "{{ lookyloo_home }}/pylookyloo"
+  environment:
+    PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:{{ poetry_root }}/bin"
+    XDG_CONFIG_HOME: "{{ lookyloo_home }}/.config"
+  register: poetry_install
+  changed_when: "'No dependencies to install or update' not in poetry_install.stdout"
+
+- name: Set pylookyloo tests url
+  ansible.builtin.replace:
+    dest: "{{ lookyloo_home }}/pylookyloo/tests/testing_github.py"
+    regexp: "https:\/\/rafiot.eu.pythonanywhere.com"
+    replace: "{{ lookyloo_pylookyloo_tests_url }}"
+    mode: '0644'
+
+- name: Run pylookyloo tests
+  ansible.builtin.command: poetry run pytest tests/testing.py tests/testing_github.py
+  args:
+    chdir: "{{ lookyloo_home }}/pylookyloo"
+  environment:
+    PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:{{ poetry_root }}/bin"
+    XDG_CONFIG_HOME: "{{ lookyloo_home }}/.config"
+  changed_when: false
+  when:
+    - lookyloo_pylookyloo_tests_enable | bool
+    - not is_container
