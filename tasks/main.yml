@@ -4,6 +4,19 @@
   ansible.builtin.include_vars: "{{ ansible_distribution }}-{{ ansible_distribution_version }}.yml"
   when: ansible_distribution == 'Ubuntu'
 
+- name: Include poetry v1.x variables
+  ansible.builtin.include_vars: poetry1.yml
+  when:
+    - lookyloo_poetry_version is defined
+    - lookyloo_poetry_version | length != 0
+    - "lookyloo_poetry_version is version('2.0', '<')"
+- name: Include poetry v2.x variables
+  ansible.builtin.include_vars: poetry2.yml
+  when: >
+    lookyloo_poetry_version is not defined
+    or lookyloo_poetry_version | length == 0
+    or lookyloo_poetry_version is version('2.0', '>=')
+
 - name: Set fact is_container
   ansible.builtin.set_fact:
     is_container: true
