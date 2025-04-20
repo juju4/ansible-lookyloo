@@ -59,7 +59,6 @@ lookyloo_pkgs:
   - gstreamer1.0-plugins-bad
   - gstreamer1.0-plugins-base
   - gstreamer1.0-plugins-good
-  - libicu74
   - libatomic1
   - libenchant-2-2
   - libepoxy0
