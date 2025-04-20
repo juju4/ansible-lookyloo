@@ -115,6 +115,12 @@ jobs:
           rsyslogd -v
         if: ${{ always() }}
         continue-on-error: true
+      - name: After script - journalctl
+        run: |
+          set -x
+          journalctl -xe -l --no-pager | tail -500
+        if: ${{ always() }}
+        continue-on-error: true
       - name: After script - files
         run: |
           set -x
