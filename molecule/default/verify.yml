@@ -137,6 +137,8 @@
         cmd: |
           set -o pipefail
           grep -rin error /var/_lookyloo/lookyloo/logs/ | tail -20
+      args:
+        executable: /bin/bash
       register: logs2
       changed_when: false
       failed_when: false
@@ -146,6 +148,8 @@
         cmd: |
           set -o pipefail
           grep -i error /var/log/lookyloo-* | tail -20
+      args:
+        executable: /bin/bash
       register: logs2
       changed_when: false
       failed_when: false
@@ -155,6 +159,8 @@
         cmd: |
           set -o pipefail
           grep -i error /var/log/uwhoisd_* | tail -20
+      args:
+        executable: /bin/bash
       register: logs3
       changed_when: false
       failed_when: false
