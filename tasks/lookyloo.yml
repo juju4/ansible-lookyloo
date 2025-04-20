@@ -57,19 +57,6 @@
   failed_when: false
   register: poetry_list
 
-- name: Install playwright deps
-  ansible.builtin.command:  # noqa no-changed-when
-    cmd: poetry run playwright install-deps
-  args:
-    chdir: "{{ lookyloo_root }}"
-    # creates: /var/_lookyloo/.cache/ms-playwright/chromium-1015/INSTALLATION_COMPLETE
-  environment:
-    PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:{{ poetry_root }}/bin"
-    XDG_CONFIG_HOME: "{{ lookyloo_home }}/.config"
-  register: poetry_install2
-  when:
-    - "'TODOplaywrightcapture' not in poetry_list"
-
 - name: Install playwright
   ansible.builtin.command: poetry run playwright install
   args:
