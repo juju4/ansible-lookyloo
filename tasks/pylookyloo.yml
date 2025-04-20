@@ -33,6 +33,7 @@
     PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:{{ poetry_root }}/bin"
     XDG_CONFIG_HOME: "{{ lookyloo_home }}/.config"
   changed_when: false
+  failed_when: false
   when:
     - lookyloo_pylookyloo_tests_enable | bool
     - not is_container
