@@ -3,12 +3,12 @@
 ## /etc/logrotate.d/lookyloo
 
 /var/log/lookyloo*.log {
-    rotate {{ lookyloo_logrotate_rotate|int }}
+    rotate {{ lookyloo_logrotate_rotate | int }}
     {{ lookyloo_logrotate_period }}
 {% if lookyloo_logrotate_datext %}
     dateext
     dateformat {{ lookyloo_logrotate_datformat }}
-{% endif%}
+{% endif %}
     missingok
     notifempty
 {% if lookyloo_logrotate_compress %}
