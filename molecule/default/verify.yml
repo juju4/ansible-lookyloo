@@ -139,7 +139,7 @@
           grep -rin error /var/_lookyloo/lookyloo/logs/ | tail -20
       args:
         executable: /bin/bash
-      register: logs2
+      register: logs1
       changed_when: false
       failed_when: false
 
