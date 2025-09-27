@@ -167,6 +167,7 @@ jobs:
           sudo tail -n20 /var/log/lookyloo-*.log
           ls -la /var/_lookyloo/lookyloo/logs/
           tail -n20 /var/_lookyloo/lookyloo/logs/*.log
+          sudo grep -C3 apt-get /var/log/auth.log
         if: ${{ always() }}
         continue-on-error: true
       - name: After script - playwright
