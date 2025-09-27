@@ -55,8 +55,8 @@
     to_port: "{{ lookyloo_webproxy_port }}"
   when:
     - lookyloo_webproxy_host != None
-    - lookyloo_webproxy_host|string
-    - lookyloo_webproxy_port|string
+    - lookyloo_webproxy_host | length > 0
+    - lookyloo_webproxy_port | length > 0
 
 - name: UFW | allow outgoing traffic for defined ports - {{ lookyloo_ufw_if }}
   community.general.ufw:

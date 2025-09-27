@@ -39,7 +39,7 @@
         manager: auto
     - name: Validate that needed packages are present
       ansible.builtin.assert:
-        that: ansible_facts.packages['python3-venv']
+        that: ansible_facts.packages['python3-venv'] | length > 0
 
     - name: Check lookyloo start file
       ansible.builtin.stat:
@@ -96,7 +96,7 @@
       failed_when: false
     - name: Validate ps output
       ansible.builtin.assert:
-        that: ps3.stdout
+        that: ps3.stdout | length > 0
       when:
         - not is_container|bool
 
@@ -127,8 +127,8 @@
       failed_when: false
     - name: Validate localhost endpoint
       ansible.builtin.assert:
-        that: >
-          "'lookyloo' in web.content"
+        that:
+          - "'lookyloo' in web.content"
       when:
         - not is_container|bool
 
@@ -184,11 +184,11 @@
           failed_when: false
         - name: Validate nginx endpoint
           ansible.builtin.assert:
-            that: >
-              "'lookyloo' in web2.content"
+            that:
+              - "'lookyloo' in web2.content"
 
     - name: Logs
       ansible.builtin.debug:
         msg: "WARNING! Error messages in logs"
-      when: >
-        "'ERROR' in logs1.stdout or 'ERROR' in logs2.stdout or 'ERROR' in logs3.stdout"
+      when:
+        - "'ERROR' in logs1.stdout or 'ERROR' in logs2.stdout or 'ERROR' in logs3.stdout"
