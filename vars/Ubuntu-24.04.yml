@@ -79,5 +79,35 @@ lookyloo_pkgs:
   - liblcms2-2
   - libmanette-0.2-0
   - libopus0
+  - libpng16-16t64
+  - libsecret-1-0
+  - libvpx9
+  - libwayland-client0
+  - libwayland-egl1
+  - libwayland-server0
+  - libwebp7
+  - libwebpdemux2
+  - libwoff1
+  - libxml2
+  - libxslt1.1
+  - libx264-164
+  - libavif16
+  - xvfb
+  - fonts-freefont-ttf
+  - fonts-ipafont-gothic
+  - fonts-liberation
+  - fonts-noto-color-emoji
+  - fonts-tlwg-loma-otf
+  - fonts-unifont
+  - fonts-wqy-zenhei
+  - libxaw7
+  - libxfont2
+  - libxkbfile1
+  - libxmu6
+  - x11-xkb-utils
+  - xfonts-cyrillic
+  - xfonts-scalable
+  - xserver-common
+  - xvfb
 
 ufw_rulename_ssh: OpenSSH
