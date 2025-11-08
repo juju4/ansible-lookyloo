@@ -1,7 +1,7 @@
 ---
 
 # renovate: datasource=github-releases depName=Lookyloo/lookyloo
-lookyloo_version: 'v1.28.1'
+lookyloo_version: 'v1.34.0'
 lookyloo_poetry_install_version: 6027c8e3a3b723586f3f171d90d3cb74fb6a2018
 lookyloo_poetry_hash: 'sha256:963d56703976ce9cdc6ff460c44a4f8fbad64c110dc447b86eeabb4a47ec2160'
 lookyloo_user: _lookyloo
