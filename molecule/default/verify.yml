@@ -1,7 +1,7 @@
 ---
 
 - name: Verify
-  hosts: lookyloo
+  hosts: "{{ playbook_hosts | default('all') }}"
   gather_facts: true
   vars:
     lookyloo_start: /var/_lookyloo/lookyloo/bin/start.py
