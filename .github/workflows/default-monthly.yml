@@ -1,12 +1,10 @@
 ---
-name: AnsibleCI
+name: AnsibleCI-monthly
 
 on:
-  push:
-  pull_request:
   workflow_dispatch:
-  schedule:  # run weekly, every Thursday
-    - cron: '40 2 * * 4'
+  schedule:  # run on the 11th of the month at 01:00 UTC
+    - cron: '0 1 11 * *'
   merge_group:
 
 concurrency:
@@ -23,10 +21,13 @@ jobs:
     continue-on-error: ${{ matrix.experimental }}
     strategy:
       fail-fast: false
-      max-parallel: 4
+      max-parallel: 2
       matrix:
         include:
           - molecule_distro: 'ubuntu:24.04'
+            experimental: false
+            suite: default
+          - molecule_distro: 'ubuntu:22.04'
             experimental: false
             suite: default
     env:
