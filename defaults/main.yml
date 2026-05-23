@@ -11,6 +11,7 @@ lookyloo_root: "{{ lookyloo_home }}/lookyloo"
 lookyloo_splash_image: scrapinghub/splash
 lookyloo_splash_version: 3.5.0
 poetry_root: /usr/local/share/poetry
+# renovate: datasource=github-releases depName=python-poetry/poetry
 lookyloo_poetry_version: 2.1.2
 lookyloo_poetry_system_git: true
 lookyloo_uwhoisd_version: 24ec32f4bc4926b85e2e91207e8326e3c6f526bf  # Mar 2025
