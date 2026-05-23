@@ -90,7 +90,7 @@ lookyloo_pkgs:
   - libwoff1
   - libxml2-16
   - libxslt1.1
-  - libx264-164
+  - libx264-165
   - libavif16
   - xvfb
   - fonts-freefont-ttf
