@@ -81,7 +81,7 @@ lookyloo_pkgs:
   - libopus0
   - libpng16-16t64
   - libsecret-1-0
-  - libvpx9
+  - libvpx12
   - libwayland-client0
   - libwayland-egl1
   - libwayland-server0
