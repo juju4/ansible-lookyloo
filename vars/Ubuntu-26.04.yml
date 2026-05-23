@@ -88,7 +88,7 @@ lookyloo_pkgs:
   - libwebp7
   - libwebpdemux2
   - libwoff1
-  - libxml2
+  - libxml2-16
   - libxslt1.1
   - libx264-164
   - libavif16
