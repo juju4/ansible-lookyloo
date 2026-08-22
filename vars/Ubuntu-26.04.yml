@@ -109,5 +109,6 @@ lookyloo_pkgs:
   - xfonts-scalable
   - xserver-common
   - xvfb
+  - libffi-dev
 
 ufw_rulename_ssh: OpenSSH
