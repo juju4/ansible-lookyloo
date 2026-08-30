@@ -28,6 +28,7 @@
       ansible.builtin.stat:
         path: /etc/nginx/sites-enabled/https
       register: nginx_conf
+      become: true
     - name: Set fact has_nginx
       ansible.builtin.set_fact:
         has_nginx: true
