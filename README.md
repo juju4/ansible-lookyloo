@@ -78,6 +78,14 @@ scrapinghub/splash [latest upstream docker](https://hub.docker.com/r/scrapinghub
 
 * if git clone fails with "error: RPC failed; curl 92 HTTP/2 stream 5 was not closed cleanly: CANCEL (err 8)", try `git config --global http.version HTTP/1.1`
 
+* If web UI does not react as expected, check browser console for possible Content-Security-Policy mismatch.
+To reinstall web static dependencies
+```shell
+sudo -u _lookyloo -s
+cd ~/lookyloo/tools
+/usr/local/share/poetry/bin/poetry run python 3rdparty.py
+```
+
 ## License
 
 BSD 2-clause
