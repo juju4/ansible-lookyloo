@@ -1,7 +1,7 @@
-[![Actions Status - Master](https://github.com/juju4/ansible-lookyloo/workflows/AnsibleCI/badge.svg)](https://github.com/juju4/ansible-lookyloo/actions?query=branch%3Amaster)
-[![Actions Status - Devel](https://github.com/juju4/ansible-lookyloo/workflows/AnsibleCI/badge.svg?branch=devel)](https://github.com/juju4/ansible-lookyloo/actions?query=branch%3Adevel)
-
 # lookyloo ansible role
+
+[![Actions Status - Main](https://github.com/juju4/ansible-lookyloo/workflows/AnsibleCI/badge.svg)](https://github.com/juju4/ansible-lookyloo/actions?query=branch%3Amain)
+[![Actions Status - Devel](https://github.com/juju4/ansible-lookyloo/workflows/AnsibleCI/badge.svg?branch=devel)](https://github.com/juju4/ansible-lookyloo/actions?query=branch%3Adevel)
 
 Setup lookyloo server, a web interface that allows you to capture and map the journey of a website page
 * https://github.com/Lookyloo/lookyloo
